@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#include <windows.h>    // для SetConsoleCP
+struct chitatel
+{
+    char fam[50];
+    char name[50];
+    char otch[50];
+    char book_name[20];
+    char srok_sdachi[8];
+};
+struct chitatel* chitatels = NULL;
+int chitatel_count = 0;
+int chitatel_emkost = 0;
+void input();
+void sort();
+void search();
+void modify();
+void delete_chitatel();
+void output();
+int main()
+{
+    
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    int choice;
+    do
+    {
+        printf("\n===== МЕНЮ =====\n");
+        printf("1. Ввод массива структур\n");
+        printf("2. Сортировка по фамилии\n");
+        printf("3. Поиск по фамилии\n");
+        printf("4. Изменение структуры\n");
+        printf("5. Удаление структуры\n");
+        printf("6. Вывод массива\n");
+        printf("7. Выход\n");
+        printf("Ваш выбор: ");
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1: input(); break;
+        case 2: sort(); break;
+        case 3: search(); break;
+        case 4: modify(); break;
+        case 5: delete_chitatel(); break;
+        case 6: output(); break;
+        case 7: printf("Выход из программы.\n"); break;
+        default: printf("Неверный пункт меню!\n");
+        }
+        free(chitatels);
+    } while (choice != 7);
+    printf("Нажмите esc для выхода\n");
+    int ch;
+    do {
+        ch = _getch();
+    } while (ch != 27);
+    return 0;
+}
+void input()
+{
+    if (chitatel_count == chitatel_emkost)
+    {
+        int new_emkost = (chitatel_emkost == 0) ? 1 : chitatel_emkost * 2;
+        struct chitatel* temp = realloc(chitatels, new_emkost * sizeof(struct chitatel));
+        if (temp == NULL)
+        {
+            printf("инвалид в памяти!!");
+            return;
+        }
+        chitatels = temp;
+        chitatel_emkost = new_emkost;
+    }
+    printf("\nЧитатель %d:\n", chitatel_count + 1);
+    printf("введите фамилию: ");
+    scanf("%s", chitatels[chitatel_count].fam);
+    printf("введите имя: ");
+    scanf("%s", chitatels[chitatel_count].name);
+    printf("введите отчество: ");
+    scanf("%s", chitatels[chitatel_count].otch);
+    }
+}
+void sort()
+{
+
+}
