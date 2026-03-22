@@ -78,9 +78,23 @@ void input()
     scanf("%s", chitatels[chitatel_count].name);
     printf("введите отчество: ");
     scanf("%s", chitatels[chitatel_count].otch);
+     chitatel_count++; // !!! Увеличиваем счётчик !!!
+    printf("Введено читателей: %d\n", chitatel_count);
     }
-}
-void sort()
-{
+    void output()
+    {
+        if(chitatel_count==0)
+        {
+            printf("error");
+            return;
+        }
+        printf("список читателей");
+        for(int i = 0; i<chitatel_count;i++)
+        {
+            printf("\nчитатель №%d\n");
+             printf("Фамилия: %s\n", chitatels[i].fam);
+        printf("Имя: %s\n", chitatels[i].name);
+        printf("Отчество: %s\n", chitatels[i].otch);
+        }
+    }
 
-}
