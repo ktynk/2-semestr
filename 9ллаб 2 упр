@@ -1,80 +1,145 @@
 #include <stdio.h>
-#include <conio.h>      // для _getch()
+#include <conio.h>
 #include <string.h>
-//#include <windows.h>    // для SetConsoleCP
-#define MAX 15
-struct student
+#include <stdlib.h>
+
+struct chitatel
 {
     char fam[50];
     char name[50];
     char otch[50];
-    char address[100];
-    char group[20];
-    float rating;
+    char book_name[50];
+    char srok_sdachi[20];
 };
-struct student students[MAX];
-int count = 0;
-// прототипы функций
 
+struct chitatel* chitatels = NULL;
+int chitatel_count = 0;
+int chitatel_emkost = 0;
 
-// 1 ввод массива 
+void input();
+void sort();
+void search();
+void delete_chitatel();
+void output();
+void save_to_file();
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        printf("\n===== МЕНЮ =====\n");
+        printf("1. Ввод читателя\n");
+        printf("2. сортировка по фамилии\n");
+        printf("3. поиск по фамилии\n");
+        printf("4. удалить читателя\n");
+        printf("5. показать всех читателей сейчсас\n");
+        printf("6. Вывод всех читателей\n");
+        printf("Ваш выбор: ");
+        scanf("%d", &choice);
+        getchar();
+
+        switch (choice)
+        {
+        case 1: input();break;
+        case 2: sort(); break;
+        case 3: search(); break;
+        case 4: delete_chitatel(); break;
+        case 5: output();break;
+        case 6: save_to_file();break;
+        case 7: printf("Выход из программы.\n"); break;
+        default: printf("Неверный пункт меню!\n");
+        }
+
+    } while (choice != 7);
+       printf("Нажмите esc для выхода\n");
+    int ch;
+    do {
+        ch = getchar();
+    } while (ch != 27);
+    free(chitatels);
+    return 0;
+}
+
 void input()
 {
-    printf("Введите количество студентов (макс. %d): ", MAX);
-    int n;
-    scanf("%d", &n);
-    if (n < 1 || n > MAX)
+    if (chitatel_count == chitatel_emkost)
     {
-        printf("Некорректное количество! Допустимо от 1 до %d.\n", MAX);
+        int new_emkost = (chitatel_emkost == 0) ? 1 : chitatel_emkost * 2;
+        struct chitatel* temp = realloc(chitatels, new_emkost * sizeof(struct chitatel));
+
+        if (temp == NULL)
+        {
+            printf("Ошибка выделения памяти!\n");
+            return;
+        }
+
+        chitatels = temp;
+        chitatel_emkost = new_emkost;
+    }
+
+    printf("\nЧитатель %d:\n", chitatel_count + 1);
+    printf("Введите фамилию: ");
+    gets(chitatels[chitatel_count].fam);
+    printf("Введите имя: ");
+    gets( chitatels[chitatel_count].name);
+    printf("Введите отчество: ");
+    gets( chitatels[chitatel_count].otch);
+    printf("Введите название книги:");
+    gets(chitatels[chitatel_count].book_name);
+    printf("Введите срок сдачи: ");
+    scanf("%s", chitatels[chitatel_count].srok_sdachi);
+    getchar();
+    chitatel_count++;
+    printf("Читатель успешно добавлен!\n");
+}
+
+void output()
+{
+    if (chitatel_count == 0)
+    {
+        printf("Список читателей пуст!\n");
         return;
     }
-    count = 0;
-    for (int i = 0; i < n; i++)
+
+    printf("\n===== СПИСОК ЧИТАТЕЛЕЙ =====\n");
+
+    for (int i = 0; i < chitatel_count; i++)
     {
-        printf("\nСтудент №%d:\n", i + 1);
-        printf("Фамилия: ");
-        scanf("%s", students[i].fam);
-        printf("Имя: ");
-        scanf("%s", students[i].name);
-        printf("Отчество: ");
-        scanf("%s", students[i].otch);
-        printf("Адрес: ");
-        scanf("%s", students[i].address);
-        printf("Группа: ");
-        scanf("%s", students[i].group);
-        printf("Рейтинг: ");
-        scanf("%f", &students[i].rating);
-        count++;
+        printf("\nЧитатель №%d\n", i + 1);
+        printf("Фамилия: %s\n", chitatels[i].fam);
+        printf("Имя: %s\n", chitatels[i].name);
+        printf("Отчество: %s\n", chitatels[i].otch);
+        printf("Книга: %s\n", chitatels[i].book_name);
+        printf("Срок сдачи: %s\n", chitatels[i].srok_sdachi);
     }
-    printf("Введено студентов: %d\n", count);
 }
-// 2 сортировка по фамилии (алф порядок)
 void sort()
 {
-    if (count == 0)
+    if (chitatel_count == 0)
     {
         printf("Массив пуст! Нечего сортировать.\n");
         return;
     }
-    struct student temp;
-    for (int i = 0; i < count - 1; i++)
+    struct chitatel temp1;
+    for (int i = 0; i < chitatel_count - 1; i++)
     {
-        for (int j = i + 1; j < count; j++)   
+        for (int j = i + 1; j < chitatel_count; j++)   
         {
-            if (strcmp(students[i].fam, students[j].fam) > 0)
+            if (strcmp(chitatels[i].fam, chitatels[j].fam) > 0)
             {
-                temp = students[i];
-                students[i] = students[j];
-                students[j] = temp;
+                temp1 = chitatels[i];
+                chitatels[i] = chitatels[j];
+                chitatels[j] = temp1;
             }
         }
     }
     printf("Массив отсортирован по фамилии.\n");
 }
-// 3 поиск по фамилии
 void search()
 {
-    if (count == 0)
+    if (chitatel_count == 0)
     {
         printf("Массив пуст!\n");
         return;
@@ -83,153 +148,85 @@ void search()
     char target[50];
     printf("Введите фамилию для поиска: ");
     while (getchar() != '\n');
-    gets(target);   // указан размер
+    gets(target);   
+    getchar();
 
     int found = 0;
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < chitatel_count; i++)
     {
-        if (strcmp(students[i].fam, target) == 0)
+        if (strcmp(chitatels[i].fam, target) == 0)
         {
-            printf("\nНайден студент #%d:\n", i + 1);
-            printf("Фамилия: %s\n", students[i].fam);
-            printf("Имя: %s\n", students[i].name);
-            printf("Отчество: %s\n", students[i].otch);
-            printf("Адрес: %s\n", students[i].address);
-            printf("Группа: %s\n", students[i].group);
-            printf("Рейтинг: %.2f\n", students[i].rating);
+            printf("\nНайден читатель #%d:\n", i + 1);
+            printf("Фамилия: %s\n", chitatels[i].fam);
+            printf("Имя: %s\n", chitatels[i].name);
+            printf("Отчество: %s\n", chitatels[i].otch);
+            printf("Книга: %s\n", chitatels[i].book_name);
+            printf("срок сдачи: %s\n", chitatels[i].srok_sdachi);
             found = 1;
         }
     }
     if (!found)
-        printf("Студент с фамилией '%s' не найден.\n", target);
+        printf("читатель с фамилией '%s' не найден.\n", target);
 }
-
-// 4 изменение структуры
-void modify()
+void delete_chitatel()   
 {
-    if (count == 0)
-    {
-        printf("Массив пуст!\n");
-        return;
-    }
-    char target[50];
-    printf("Введите фамилию студента для изменения: ");
-    while (getchar() != '\n');
-    gets(target);
-
-    for (int i = 0; i < count; i++)
-    {
-        if (strcmp(students[i].fam, target) == 0)
-        {
-            printf("Найден студент. Введите новые данные:\n");
-            printf("Фамилия: ");
-            gets(students[i].fam);
-            printf("Имя: ");
-            gets(students[i].name);
-            printf("Отчество: ");
-            gets(students[i].otch);
-            printf("Адрес: ");
-            gets(students[i].address);
-            printf("Группа: ");
-            gets(students[i].group);
-            printf("Рейтинг: ");
-            scanf("%f", &students[i].rating);
-           
-            printf("Данные обновлены.\n");
-            return;
-        }
-    }
-    printf("Студент с фамилией '%s' не найден.\n", target);
-}
-
-// 5 удаление структуры
-void delete_student()   // имя совпадает с прототипом
-{
-    if (count == 0)
+    if (chitatel_count == 0)
     {
         printf("Массив пуст!\n");
         return;
     }
 
     char target[50];
-    printf("Введите фамилию студента для удаления: ");
+    printf("Введите фамилию читателя для удаления: ");
     while (getchar() != '\n');
     gets(target);
+    getchar();
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < chitatel_count; i++)
     {
-        if (strcmp(students[i].fam, target) == 0)
+        if (strcmp(chitatels[i].fam, target) == 0)
         {
             // сдвиг элементов влево
-            for (int j = i; j < count - 1; j++)
+            for (int j = i; j < chitatel_count - 1; j++)
             {
-                students[j] = students[j + 1];
+                chitatels[j] = chitatels[j + 1];
             }
-            count--;
-            printf("Студент с фамилией '%s' удалён.\n", target);
+            chitatel_count--;
+            printf("читатель с фамилией '%s' удалён.\n", target);
             return;
         }
     }
-    printf("Студент с фамилией '%s' не найден.\n", target);
+    printf("читатель с фамилией '%s' не найден.\n", target);
 }
 
-// 6 вывод массива
-void output()
+void save_to_file()
 {
-    if (count == 0)
+    if (chitatel_count == 0)
     {
-        printf("Массив пуст!\n");
+        printf("Нет данных для сохранения в файл!\n");
         return;
     }
 
-    printf("\nСписок студентов:\n");
-    for (int i = 0; i < count; i++)
+    FILE *vixod = fopen("vixod.txt", "w");
+    if (vixod == NULL)
     {
-        printf("\n--- Студент #%d ---\n", i + 1);
-        printf("Фамилия: %s\n", students[i].fam);
-        printf("Имя: %s\n", students[i].name);
-        printf("Отчество: %s\n", students[i].otch);
-        printf("Адрес: %s\n", students[i].address);
-        printf("Группа: %s\n", students[i].group);
-        printf("Рейтинг: %.2f\n", students[i].rating);
+        printf("Ошибка открытия файла!\n");
+        return;
     }
-}
-int main()
-{
-    // поддержка русского языка в консоли
-   /* SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);*/
-    int choice;
-    do
+
+    fprintf(vixod, "===== СПИСОК ЧИТАТЕЛЕЙ =====\n\n");
+
+    for (int i = 0; i < chitatel_count; i++)
     {
-        printf("\n===== МЕНЮ =====\n");
-        printf("1. Ввод массива структур\n");
-        printf("2. Сортировка по фамилии\n");
-        printf("3. Поиск по фамилии\n");
-        printf("4. Изменение структуры\n");
-        printf("5. Удаление структуры\n");
-        printf("6. Вывод массива\n");
-        printf("7. Выход\n");
-        printf("Ваш выбор: ");
-        scanf("%d", &choice);
-        switch (choice)
-        {
-        case 1: input(); break;
-        case 2: sort(); break;
-        case 3: search(); break;
-        case 4: modify(); break;
-        case 5: delete_student(); break;
-        case 6: output(); break;
-        case 7: printf("Выход из программы.\n"); break;
-        default: printf("Неверный пункт меню!\n");
-        }
-    } while (choice != 7);
-    printf("Нажмите esc для выхода\n");
-    int ch;
-    do {
-        ch = getchar();
-    } while (ch != 27);
-    return 0;
+        fprintf(vixod, "Читатель №%d\n", i + 1);
+        fprintf(vixod, "Фамилия: %s\n", chitatels[i].fam);
+        fprintf(vixod, "Имя: %s\n", chitatels[i].name);
+        fprintf(vixod, "Отчество: %s\n", chitatels[i].otch);
+        fprintf(vixod, "Книга: %s\n", chitatels[i].book_name);
+        fprintf(vixod, "Срок сдачи: %s\n\n", chitatels[i].srok_sdachi);
+    }
+
+    fclose(vixod);
+
+    printf("Данные успешно сохранены в файл vixod.txt\n");
 }
-
-
