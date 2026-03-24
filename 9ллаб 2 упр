@@ -147,9 +147,7 @@ void search()
 
     char target[50];
     printf("Введите фамилию для поиска: ");
-    while (getchar() != '\n');
-    gets(target);   
-    getchar();
+    gets(target);   // без while(getchar...) и без getchar() после
 
     int found = 0;
     for (int i = 0; i < chitatel_count; i++)
@@ -165,10 +163,11 @@ void search()
             found = 1;
         }
     }
+
     if (!found)
         printf("читатель с фамилией '%s' не найден.\n", target);
 }
-void delete_chitatel()   
+void delete_chitatel()
 {
     if (chitatel_count == 0)
     {
@@ -178,15 +177,12 @@ void delete_chitatel()
 
     char target[50];
     printf("Введите фамилию читателя для удаления: ");
-    while (getchar() != '\n');
-    gets(target);
-    getchar();
+    gets(target);   // без while(getchar...) и без getchar() после
 
     for (int i = 0; i < chitatel_count; i++)
     {
         if (strcmp(chitatels[i].fam, target) == 0)
         {
-            // сдвиг элементов влево
             for (int j = i; j < chitatel_count - 1; j++)
             {
                 chitatels[j] = chitatels[j + 1];
@@ -196,9 +192,9 @@ void delete_chitatel()
             return;
         }
     }
+
     printf("читатель с фамилией '%s' не найден.\n", target);
 }
-
 void save_to_file()
 {
     if (chitatel_count == 0)
