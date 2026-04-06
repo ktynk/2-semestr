@@ -29,14 +29,14 @@ int main()
 
     do
     {
-        printf("\n===== МЕНЮ =====\n");
-        printf("1. Ввод читателя\n");
-        printf("2. сортировка по фамилии\n");
-        printf("3. поиск по фамилии\n");
-        printf("4. удалить читателя\n");
-        printf("5. показать всех читателей сейчсас\n");
-        printf("6. Вывод всех читателей\n");
-        printf("Ваш выбор: ");
+        printf("\n===== menu =====\n");
+        printf("1. vvod chitatel\n");
+        printf("2. sort po fam\n");
+        printf("3. search po fam\n");
+        printf("4. delete chitatel\n");
+        printf("5. pokaz chitatel v console\n");
+        printf("6. vivod v fail chitatel\n");
+        printf("vash vibor: ");
         scanf("%d", &choice);
         getchar();
 
@@ -79,42 +79,43 @@ void input()
         chitatel_emkost = new_emkost;
     }
 
-    printf("\nЧитатель %d:\n", chitatel_count + 1);
-    printf("Введите фамилию: ");
+    printf("\nchitatel %d:\n", chitatel_count + 1);
+    printf("vvod fam: ");
     gets(chitatels[chitatel_count].fam);
-    printf("Введите имя: ");
+    printf("vvod name: ");
     gets( chitatels[chitatel_count].name);
-    printf("Введите отчество: ");
+    printf("vvedite otch: ");
     gets( chitatels[chitatel_count].otch);
-    printf("Введите название книги:");
+    printf("book name vvod:");
     gets(chitatels[chitatel_count].book_name);
-    printf("Введите срок сдачи: ");
+    printf("vvod srok sdachi: ");
     scanf("%s", chitatels[chitatel_count].srok_sdachi);
     getchar();
     chitatel_count++;
-    printf("Читатель успешно добавлен!\n");
+    printf("chitatel dobavlen!\n");
 }
 
 void output()
 {
     if (chitatel_count == 0)
     {
-        printf("Список читателей пуст!\n");
+        printf("spisok chitatekls!\n");
         return;
     }
 
-    printf("\n===== СПИСОК ЧИТАТЕЛЕЙ =====\n");
+    printf("\n===== spiso chitatel =====\n");
 
     for (int i = 0; i < chitatel_count; i++)
     {
-        printf("\nЧитатель №%d\n", i + 1);
-        printf("Фамилия: %s\n", chitatels[i].fam);
-        printf("Имя: %s\n", chitatels[i].name);
-        printf("Отчество: %s\n", chitatels[i].otch);
-        printf("Книга: %s\n", chitatels[i].book_name);
-        printf("Срок сдачи: %s\n", chitatels[i].srok_sdachi);
+        printf("\nchitatel №%d\n", i + 1);
+        printf("fam: %s\n", chitatels[i].fam);
+        printf("name: %s\n", chitatels[i].name);
+        printf("imypobatky: %s\n", chitatels[i].otch);
+        printf("book: %s\n", chitatels[i].book_name);
+        printf("srok sdachi: %s\n", chitatels[i].srok_sdachi);
     }
 }
+
 void sort()
 {
     if (chitatel_count == 0)
@@ -137,6 +138,7 @@ void sort()
     }
     printf("Массив отсортирован по фамилии.\n");
 }
+
 void search()
 {
     if (chitatel_count == 0)
@@ -146,7 +148,7 @@ void search()
     }
 
     char target[50];
-    printf("Введите фамилию для поиска: ");
+    printf("vvedite fam poisk: ");
     gets(target);  
 
     int found = 0;
@@ -154,19 +156,20 @@ void search()
     {
         if (strcmp(chitatels[i].fam, target) == 0)
         {
-            printf("\nНайден читатель #%d:\n", i + 1);
-            printf("Фамилия: %s\n", chitatels[i].fam);
-            printf("Имя: %s\n", chitatels[i].name);
-            printf("Отчество: %s\n", chitatels[i].otch);
-            printf("Книга: %s\n", chitatels[i].book_name);
-            printf("срок сдачи: %s\n", chitatels[i].srok_sdachi);
+            printf("\nnaiden chitatel #%d:\n", i + 1);
+            printf("fam: %s\n", chitatels[i].fam);
+            printf("name: %s\n", chitatels[i].name);
+            printf("otch: %s\n", chitatels[i].otch);
+            printf("book: %s\n", chitatels[i].book_name);
+            printf("srok sdachi: %s\n", chitatels[i].srok_sdachi);
             found = 1;
         }
     }
 
     if (!found)
-        printf("читатель с фамилией '%s' не найден.\n", target);
+        printf("chitatel s fam  '%s' ne naiden.\n", target);
 }
+
 void delete_chitatel()
 {
     if (chitatel_count == 0)
@@ -176,7 +179,7 @@ void delete_chitatel()
     }
 
     char target[50];
-    printf("Введите фамилию читателя для удаления: ");
+    printf("vvedite fam chitatel dla delete: ");
     gets(target);   
 
     for (int i = 0; i < chitatel_count; i++)
@@ -195,6 +198,7 @@ void delete_chitatel()
 
     printf("читатель с фамилией '%s' не найден.\n", target);
 }
+
 void save_to_file()
 {
     if (chitatel_count == 0)
@@ -203,26 +207,26 @@ void save_to_file()
         return;
     }
 
-    FILE *vixod = fopen("vixod.dat", "b");
+    FILE *vixod = fopen("vixod.dat", "w+b");        // ← изменено только это
     if (vixod == NULL)
     {
-        printf("Ошибка открытия файла!\n");
+        printf("Ошибка открытия файла\n");
         return;
     }
 
-    fprintf(vixod, "===== СПИСОК ЧИТАТЕЛЕЙ =====\n\n");
+    fprintf(vixod, "===== spisok chitatel =====\n\n");
 
     for (int i = 0; i < chitatel_count; i++)
     {
-        fprintf(vixod, "Читатель №%d\n", i + 1);
-        fprintf(vixod, "Фамилия: %s\n", chitatels[i].fam);
-        fprintf(vixod, "Имя: %s\n", chitatels[i].name);
-        fprintf(vixod, "Отчество: %s\n", chitatels[i].otch);
-        fprintf(vixod, "Книга: %s\n", chitatels[i].book_name);
-        fprintf(vixod, "Срок сдачи: %s\n\n", chitatels[i].srok_sdachi);
+        fprintf(vixod, "chitatel №%d\n", i + 1);
+        fprintf(vixod, "fam: %s\n", chitatels[i].fam);
+        fprintf(vixod, "name: %s\n", chitatels[i].name);
+        fprintf(vixod, "otch: %s\n", chitatels[i].otch);
+        fprintf(vixod, "book: %s\n", chitatels[i].book_name);
+        fprintf(vixod, "sroksdachi: %s\n\n", chitatels[i].srok_sdachi);
     }
 
     fclose(vixod);
-
-    printf("Данные успешно сохранены в файл vixod.txt\n");
+  
+    printf("dannie sohraneni v vixod.dat\n");
 }
