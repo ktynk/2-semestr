@@ -147,7 +147,7 @@ void search()
 
     char target[50];
     printf("Введите фамилию для поиска: ");
-    gets(target);   // без while(getchar...) и без getchar() после
+    gets(target);  
 
     int found = 0;
     for (int i = 0; i < chitatel_count; i++)
@@ -177,7 +177,7 @@ void delete_chitatel()
 
     char target[50];
     printf("Введите фамилию читателя для удаления: ");
-    gets(target);   // без while(getchar...) и без getchar() после
+    gets(target);   
 
     for (int i = 0; i < chitatel_count; i++)
     {
@@ -203,7 +203,7 @@ void save_to_file()
         return;
     }
 
-    FILE *vixod = fopen("vixod.txt", "w");
+    FILE *vixod = fopen("vixod.dat", "b");
     if (vixod == NULL)
     {
         printf("Ошибка открытия файла!\n");
