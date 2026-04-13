@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <math.h>
+#define N 3 
+int main() {
+
+    int i, j, k;
+    double a[N][N+1] = {
+        {0.42, -1.13,  7.05,  6.15},
+        {1.14, -2.15,  5.11, -4.16},
+        {-0.71, 0.81, -0.02, -0.17}
+    };
+    double temp, factor, x[N];
+    for (i = 0; i<N;i++)
+    {
+        int max=i;
+        for(j=i+1;j<N;j++)
+        {
+            if(fabs(a[j][i])>fabs(a[max][i]))
+            {
+                max = j;
+            }
+
+        }
+        if (max !=i)
+        {
+            for (k = 0; k<(N+1);k++)
+            {
+                temp = a[i][k];
+                a[i][k]= a[max][k];
+                a[max][k] = temp;
+            }
+        }
+                if(fabs(a[i][i])<1e-10)
+                {
+                    printf("нет единственго решения ");
+                    return 1;
+                }
+                for (j = i + 1; j < N; j++) {
+                    factor = a[j][i] / a[i][i];
+                    for (k = i; k < (N+1); k++) {
+                        a[j][k] -= factor * a[i][k];
+                    }
+            }
+        }
+        for (i = N-1; i >= 0; i--) {
+            x[i] = a[i][N];
+            for (j = i + 1; j< N; j++) {
+                x[i] -= a[i][j] * x[j];
+            }
+            x[i] /= a[i][i];
+        }
+        printf("Решение системы:\n");
+        printf("x1 = %.6lf\n", x[0]);
+        printf("x2 = %.6lf\n", x[1]);
+        printf("x3 = %.6lf\n", x[2]);
+        return 0;
+    }
