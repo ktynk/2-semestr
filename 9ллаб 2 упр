@@ -207,7 +207,7 @@ void save_to_file()
         return;
     }
 
-    FILE *vixod = fopen("vixod.dat", "w+b");        // ← изменено только это
+    FILE *vixod = fopen("vixod.dat", "w+b");      
     if (vixod == NULL)
     {
         printf("Ошибка открытия файла\n");
