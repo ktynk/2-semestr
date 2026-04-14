@@ -22,7 +22,7 @@ void search();
 void delete_chitatel();
 void output();
 void save_to_file();
-
+void read_file();
 int main()
 {
     int choice;
@@ -36,6 +36,7 @@ int main()
         printf("4. delete chitatel\n");
         printf("5. pokaz chitatel v console\n");
         printf("6. vivod v fail chitatel\n");
+        printf("8. read faile\n");
         printf("vash vibor: ");
         scanf("%d", &choice);
         getchar();
@@ -49,6 +50,7 @@ int main()
         case 5: output();break;
         case 6: save_to_file();break;
         case 7: printf("Выход из программы.\n"); break;
+        case 8: read_file();break;
         default: printf("Неверный пункт меню!\n");
         }
 
@@ -207,26 +209,37 @@ void save_to_file()
         return;
     }
 
-    FILE *vixod = fopen("vixod.dat", "w+b");      
-    if (vixod == NULL)
+    FILE *vixod = fopen("vixod.dat", "wb");
+	size_t written = fwrite(chitatels,sizeof(struct chitatel),chitatel_count,vixod);      
+    if (written == chitatel_count)
     {
-        printf("Ошибка открытия файла\n");
-        return;
+     printf("zapizano v binar %zu zapicey v binar .\n", written);
     }
-
-    fprintf(vixod, "===== spisok chitatel =====\n\n");
-
-    for (int i = 0; i < chitatel_count; i++)
+    else
     {
-        fprintf(vixod, "chitatel №%d\n", i + 1);
-        fprintf(vixod, "fam: %s\n", chitatels[i].fam);
-        fprintf(vixod, "name: %s\n", chitatels[i].name);
-        fprintf(vixod, "otch: %s\n", chitatels[i].otch);
-        fprintf(vixod, "book: %s\n", chitatels[i].book_name);
-        fprintf(vixod, "sroksdachi: %s\n\n", chitatels[i].srok_sdachi);
-    }
-
+    	printf("ne videlalas");
+    	return;
+	}
     fclose(vixod);
-  
     printf("dannie sohraneni v vixod.dat\n");
+}
+    void read_file()
+	{
+     FILE *fp = fopen("vixod.dat", "rb");
+     int count = fread(chitatels, sizeof(struct chitatel),chitatel_count , fp);
+    if(count == chitatel_count)
+    {
+        printf("%s \n",chitatels);
+    }
+    else
+    {
+        if (feof(fp))   //конец файла
+        {
+            printf("Unexpected end of file\n");
+            printf("Available: %s",chitatels);
+        }
+        else if (ferror(fp))    
+            perror("Error while reading file\n");
+    }
+    fclose(fp);
 }
