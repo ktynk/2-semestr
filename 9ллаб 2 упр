@@ -209,50 +209,85 @@ void save_to_file()
         return;
     }
 
-    FILE *vixod = fopen("vixod.dat", "wb");
-	size_t written = fwrite(chitatels,sizeof(struct chitatel),chitatel_count,vixod);      
-    if (written == chitatel_count)
+    FILE *f = fopen("vixod.dat", "wb");
+    if (f == NULL)
     {
-     printf("zapizano v binar %zu zapicey v binar .\n", written);
+        perror("invalid zapisi");
+        return;
     }
-    else
+
+    //   записываем количество записей 
+    if (fwrite(&chitatel_count, sizeof(int), 1, f) != 1)
     {
-    	printf("ne videlalas");
-    	return;
-	}
-    fclose(vixod);
-    printf("dannie sohraneni v vixod.dat\n");
+        printf("invalid zapisi!\n");
+        fclose(f);
+        return;
+    }
+
+    // записываем сами структуры 
+    size_t written = fwrite(chitatels, sizeof(struct chitatel), chitatel_count, f);
+    fclose(f);
+
+    if (written != (size_t)chitatel_count)
+    {
+        printf("invalid zapisi!\n");
+        return;
+    }
+
+    printf("dannie sohraneni v vixod.dat (%d zapisey)\n", chitatel_count);
 }
-    void read_file() {
-    FILE *f = fopen("vixod.dat", "rb");
-    if (!f) {
-        perror("Ошибка открытия файла");
+
+void read_file()
+{
+    FILE *f = fopen("read.dat", "rb");
+    if (f == NULL)
+    {
+        perror("invalid fail dlz chtenya ne otkrilsa");
         return;
     }
 
     int count = 0;
-    if (fread(&count, sizeof(int), 1, f) != 1) {
-        printf("erorr!\n");
+
+
+    if (fread(&count, sizeof(int), 1, f) != 1)
+    {
+        printf("invalid chtrniz zapisi!\n");
         fclose(f);
         return;
     }
-    struct chitatel *temp = realloc(chitatels, count * sizeof(struct chitatel));
-    if (!temp && count > 0) {
-        printf("erorr!\n");
+
+    if (count <= 0)
+    {
+        printf("Файл пуст или повреждён (count=%d)\n", count);
+        fclose(f);
+        return;
+    }
+
+    // 2) отдельная память под count записей 
+    struct chitatel *temp = (struct chitatel*)realloc(chitatels, count * sizeof(struct chitatel));
+    if (temp == NULL)
+    {
+        printf("invalid pamyat!\n");
         fclose(f);
         return;
     }
     chitatels = temp;
+    chitatel_emkost = count;
 
+    // читаем массив структур 
     size_t readed = fread(chitatels, sizeof(struct chitatel), count, f);
     fclose(f);
 
-    if (readed != (size_t)count) {
-        printf("erorr!\n");
+    if (readed != (size_t)count)
+    {
+        printf("invalid dannix(prochitano %zu из %d)\n", readed, count);
         return;
     }
 
     chitatel_count = count;
-    chitatel_emkost = count;
-    printf("prochitano %d zapisey iz vixod.dat\n", chitatel_count);
+
+    printf("prochitamo %d zapisey iz vixod.dat\n", chitatel_count);
+
+    // раскомментировать: 
+    output();
 }
