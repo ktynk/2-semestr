@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define N 10
+#define M 10
+int main()
+{   int A[N];
+	int B[M];
+	int D = N+M;
+	printf("zapolnim A:\n");
+    for(int i = 0; i < N; i++)
+    {
+       scanf("%d",&A[i]);
+    }
+    	printf("zapolnim B:\n");
+    	  for(int i = 0; i < M; i++)
+    {
+       scanf("%d",&B[i]);
+    }
+      for(int i = 0; i < N;i++) 
+	  {
+        //ищем минимум
+        for(int j = i + 1; j < N; j++) {
+            if (A[j] < A[i]) {
+                int min = A[j];
+                A[j] = A[i];
+                A[i] = min;
+            }
+        }
+    }
+      for(int i = 0; i < M;i++) 
+	  {
+        //ищем максимум
+        for(int j = i + 1; j < M; j++) {
+            if (B[j] > B[i]) {
+                int max = B[j];
+                B[j] = B[i];
+                B[i] = max;
+            }
+        }
+    }
+   
+    FILE*input,*output;
+    input = fopen("input.txt", "w");
+      for (int i = 0; i < N; i++)
+    {
+        fprintf(input, "%d ", A[i]);
+    }
+      for (int i = 0; i < M; i++)
+    {
+        fprintf(input, "%d ", B[i]);
+    }
+    fclose(input);
+      input = fopen("input.txt", "r");
+      int C[D];
+
+    for (int i = 0; i < D; i++)
+    {
+        fscanf(input, "%d ", &C[i]);
+    }
+     fclose(input);
+        for(int i = 0; i < D;i++) {
+        //ищем финал минимум
+        for(int j = i + 1; j < D; j++) {
+            if (C[j] < C[i]) {
+                int min = C[j];
+                C[j] = C[i];
+                C[i] = min;
+            }
+        }
+    }
+        output = fopen("output.txt", "w");
+     for (int i = 0; i < D; i++)
+     {   
+         fprintf(output, "%d ", C[i]);
+     }
+        fclose(output);
+    return 0;
+}
