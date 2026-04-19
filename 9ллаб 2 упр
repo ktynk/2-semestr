@@ -223,23 +223,36 @@ void save_to_file()
     fclose(vixod);
     printf("dannie sohraneni v vixod.dat\n");
 }
-    void read_file()
-	{
-     FILE *fp = fopen("vixod.dat", "rb");
-     int count = fread(chitatels, sizeof(struct chitatel),chitatel_count , fp);
-    if(count == chitatel_count)
-    {
-        printf("%s \n",chitatels);
+    void read_file() {
+    FILE *f = fopen("vixod.dat", "rb");
+    if (!f) {
+        perror("Ошибка открытия файла");
+        return;
     }
-    else
-    {
-        if (feof(fp))   //конец файла
-        {
-            printf("Unexpected end of file\n");
-            printf("Available: %s",chitatels);
-        }
-        else if (ferror(fp))    
-            perror("Error while reading file\n");
+
+    int count = 0;
+    if (fread(&count, sizeof(int), 1, f) != 1) {
+        printf("erorr!\n");
+        fclose(f);
+        return;
     }
-    fclose(fp);
+    struct chitatel *temp = realloc(chitatels, count * sizeof(struct chitatel));
+    if (!temp && count > 0) {
+        printf("erorr!\n");
+        fclose(f);
+        return;
+    }
+    chitatels = temp;
+
+    size_t readed = fread(chitatels, sizeof(struct chitatel), count, f);
+    fclose(f);
+
+    if (readed != (size_t)count) {
+        printf("erorr!\n");
+        return;
+    }
+
+    chitatel_count = count;
+    chitatel_emkost = count;
+    printf("prochitano %d zapisey iz vixod.dat\n", chitatel_count);
 }
