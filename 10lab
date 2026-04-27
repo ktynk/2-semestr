@@ -50,8 +50,8 @@ int main() {
             x[i] /= a[i][i];
         }
         printf("Решение системы:\n");
-        printf("x1 = %.6lf\n", x[0]);
-        printf("x2 = %.6lf\n", x[1]);
-        printf("x3 = %.6lf\n", x[2]);
+        printf("x1 = %.4lf\n", x[0]);
+        printf("x2 = %.4lf\n", x[1]);
+        printf("x3 = %.4lf\n", x[2]);
         return 0;
     }
