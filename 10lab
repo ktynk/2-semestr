@@ -9,7 +9,7 @@ int main() {
         {1.14, -2.15,  5.11, -4.16},
         {-0.71, 0.81, -0.02, -0.17}
     };
-    double temp, factor, x[N];
+    double temp, raz, x[N];
     for (i = 0; i<N;i++)
     {
         int max=i;
@@ -36,9 +36,9 @@ int main() {
                     return 1;
                 }
                 for (j = i + 1; j < N; j++) {
-                    factor = a[j][i] / a[i][i];
+                    raz = a[j][i] / a[i][i];
                     for (k = i; k < (N+1); k++) {
-                        a[j][k] -= factor * a[i][k];
+                        a[j][k] -= raz * a[i][k];
                     }
             }
         }
