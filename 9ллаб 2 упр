@@ -263,7 +263,7 @@ void read_file()
         return;
     }
 
-    // 2) отдельная память под count записей 
+    // 2) отдельная память под count записей подогнать размер памяти точно под количество записей из файла
     struct chitatel *temp = (struct chitatel*)realloc(chitatels, count * sizeof(struct chitatel));
     if (temp == NULL)
     {
