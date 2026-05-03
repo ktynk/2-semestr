@@ -30,11 +30,6 @@ int main() {
                 a[max][k] = temp;
             }
         }
-                if(fabs(a[i][i])<1e-10)
-                {
-                    printf("net edin resheniya ");
-                    return 1;
-                }
                 for (j = i + 1; j < N; j++) {
                     raz = a[j][i] / a[i][i];
                     for (k = i; k < (N+1); k++) {
