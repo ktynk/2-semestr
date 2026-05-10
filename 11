@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+#define N 13 // размер хеш-таблицы 
+#define NUM_KEYS   8 // сколько случайных ключей вставить
+
+// Хеш-функция 
+int HashFunction(int k) {
+    double A = 0.618033;
+    int h = N * fmod(k * A, 1);
+    return h;
+}
+
+// Вставка в таблицу с линейным пробированием
+void insert(int table[], int key) {
+    int h = HashFunction(key);
+    // если ячейка занята, ищем следующую свободную
+    while (table[h] != -1) {
+        h = (h + 1) % N;
+    }
+    table[h] = key;
+}
+
+// Поиск максимального ключа в таблице
+int find_max(int table[]) {
+    int max = -1;   // таблица заполнена неотрицательными числами
+    for (int i = 0; i < N; i++) {
+        if (table[i] != -1 && table[i] > max) {
+            max = table[i];
+        }
+    }
+    return max;
+}
+
+int main() {
+    int hash_table[N];
+
+    // Инициализация: -1 означает «пусто»
+    for (int i = 0; i < N; i++)
+        hash_table[i] = -1;
+
+    // Генерация случайных ключей и вставка
+    srand(time(NULL));
+    printf("RANDOM KEY:\n");
+    for (int i = 0; i < NUM_KEYS; i++) {
+        int key = rand() % 100;   // случайное число от 0 до 99
+        printf(" %d", key);
+        insert(hash_table, key);
+    }
+    printf("\n\n");
+
+    // Вывод всей хеш-таблицы
+    printf("hesh tabl(nomer : key):\n");
+    for (int i = 0; i < N; i++) {
+        printf("[%2d] : ", i);
+        if (hash_table[i] == -1)
+            printf("nyuma\n");
+        else
+            printf("%d\n", hash_table[i]);
+    }
+
+    // Поиск максимального ключа
+    int max_key = find_max(hash_table);
+    printf("\nzapis s max key: %d\n", max_key);
+
+    return 0;
+}
