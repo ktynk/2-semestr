@@ -13,7 +13,7 @@ int HashFunction(int k) {
     return h;
 }
 
-// Вставка в таблицу с линейным пробированием
+
 void insert(int table[], int key) {
     int h = HashFunction(key);
     // если ячейка занята, ищем следующую свободную
@@ -37,7 +37,7 @@ int find_max(int table[]) {
 int main() {
     int hash_table[N];
 
-    // Инициализация: -1 означает «пусто»
+   
     for (int i = 0; i < N; i++)
         hash_table[i] = -1;
 
